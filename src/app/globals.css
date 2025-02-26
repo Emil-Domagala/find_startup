@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}
+
+@layer utilities {
+  .flex-between {
+    @apply flex justify-between items-center;
+  }
+
+  .text-30-extrabold {
+    @apply text-[30px] font-extrabold text-white;
+  }
+
+  .text-30-bold {
+    @apply text-[30px] font-bold text-black;
+  }
+
+  .text-30-semibold {
+    @apply font-semibold text-[30px] text-black;
+  }
+
+  .text-26-semibold {
+    @apply font-semibold text-[26px] text-black;
+  }
+
+  .text-24-black {
+    @apply text-[24px] font-black text-black;
+  }
+
+  .text-20-medium {
+    @apply font-medium text-[20px] text-black;
+  }
+
+  .text-16-medium {
+    @apply font-medium text-[16px] text-black;
+  }
+
+  .text-14-normal {
+    @apply font-normal text-sm text-white-100/80;
+  }
+
+  .tag {
+    @apply bg-secondary px-6 py-3 font-work-sans font-bold rounded-sm uppercase relative tag-tri;
+  }
+}
+
+.pattern {
+  background-image: linear-gradient(
+    to right,
+    transparent 49.5%,
+    rgba(251, 232, 67, 0.2) 49.5%,
+    rgba(251, 232, 67, 0.6) 50.5%,
+    transparent 50.5%
+  );
+  background-size: 5% 100%;
+  background-position: center;
+  background-repeat: repeat-x;
+}
