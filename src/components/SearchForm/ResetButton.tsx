@@ -1,6 +1,7 @@
 'use client';
 import { X } from 'lucide-react';
 import Link from 'next/link';
+import Button from '../Button/Button';
 
 const ResetButton = () => {
   const handleReset = () => {
@@ -10,12 +11,9 @@ const ResetButton = () => {
 
   return (
     <Link href="/">
-      <button
-        type="reset"
-        onClick={handleReset}
-        className="size-[50px] rounded-full bg-black flex justify-center items-center">
+      <Button size={50} type="reset" onClick={handleReset}>
         <X className="size-6 text-white" />
-      </button>
+      </Button>
     </Link>
   );
 };
