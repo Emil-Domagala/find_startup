@@ -6,7 +6,7 @@ import Button from '../Button/Button';
 
 const StartupCard = ({ post }: { post: StartupTypeCard }) => {
   return (
-    <li className="bg-white border-[5px] border-black py-6 px-5 rounded-[22px] shadow-200 hover:border-primary transition-all duration-500 hover:shadow-300 hover:bg-primary-100 overflow-hidden">
+    <li className="bg-white border-[5px] border-black py-6 px-5 rounded-[22px] shadow-200 hover:border-primary transition-all duration-400 hover:shadow-300 hover:bg-primary-100 overflow-hidden">
       <div className="flex justify-between items-center">
         <p className="font-medium text-[0.9rem] py-2 rounded-full group-hover:bg-white-100">
           {formatDate(post._createdAt)}
