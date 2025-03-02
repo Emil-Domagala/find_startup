@@ -51,10 +51,6 @@
     @apply font-normal text-sm text-white-100/80;
   }
 
-  .tag {
-    @apply bg-secondary px-6 py-3 font-work-sans font-bold rounded-sm uppercase relative tag-tri;
-  }
-
    .section_container {
     @apply px-6 py-10 max-w-7xl mx-auto;
   }
