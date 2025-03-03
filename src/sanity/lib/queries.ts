@@ -10,6 +10,9 @@ export const STARTUPS_QUERIES = defineQuery(`
 export const STARTUP_BY_ID_QUERIES = defineQuery(`
     *[_type=="startup" && _id==$id][0] {
     _id, title, slug, _createdAt,
-    author->{_id, name, image, bio},
+    author->{_id, name, username, image, bio},
     views, description, category, image,pitch
   }`);
+
+export const STARTUP_VIEWS_BY_ID_QUERIES = defineQuery(`
+    *[_type=="startup" && _id==$id][0] {_id, views}`);
