@@ -1,9 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useActionState, useState } from 'react';
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import MDEditor from '@uiw/react-md-editor';
+import { formSchema } from '@/lib/validation';
+import { z } from 'zod';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import { createPitch } from '@/lib/actions';
 
 type errorType = {
   title?: string;
@@ -16,11 +21,42 @@ type errorType = {
 const StartupForm = () => {
   const [errors, setErrors] = useState<errorType>({});
   const [pitch, setPitch] = useState('');
+  const router = useRouter();
 
-  const isPending = false;
+  const handleFormSubmition = async (prevState: any, formData: FormData) => {
+    try {
+      const formValues = {
+        title: formData.get('title') as string,
+        description: formData.get('description') as string,
+        category: formData.get('category') as string,
+        link: formData.get('link') as string,
+        pitch,
+      };
+      await formSchema.parseAsync(formValues);
+      const result = await createPitch(prevState, formData, pitch);
 
+      console.log(result);
+      if (result.status === 'SUCCESS') {
+        toast.success('Your startup pitch has been created successfully');
+        router.push(`/${result._id}`);
+      }
+      return result;
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        const fieldErrors = err.flatten().fieldErrors;
+        setErrors(fieldErrors as unknown as Record<string, string>);
+        toast.error('Please check your inputs and try again');
+        return { ...prevState, error: 'Validation failed', status: 'ERROR' };
+      }
+      toast.error('An unexpected Error occured');
+      return { ...prevState, error: 'An unexpected Error occured', status: 'ERROR' };
+    } finally {
+    }
+  };
+
+  const [state, formAction, isPending] = useActionState(handleFormSubmition, { error: '', status: 'INITIAL' });
   return (
-    <form action={() => {}} className="max-w-2xl mx-auto bg-white my-10 space-y-8 px-6">
+    <form action={formAction} className="max-w-2xl mx-auto bg-white my-10 space-y-8 px-6">
       <div>
         <label htmlFor="title" className="font-bold text-[1.1rem] text-black uppercase">
           Title
