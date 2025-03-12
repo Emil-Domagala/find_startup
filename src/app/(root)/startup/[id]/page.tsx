@@ -2,7 +2,7 @@ import Header from '@/components/Header/Header';
 import { formatDate } from '@/lib/utils';
 import { client } from '@/sanity/lib/client';
 
-import { STARTUP_BY_ID_QUERIES } from '@/sanity/lib/queries';
+import { PLAYLIST_BY_SLUG_QUERY, STARTUP_BY_ID_QUERIES } from '@/sanity/lib/queries';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -10,6 +10,7 @@ import markdownit from 'markdown-it';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import View from '@/components/View/View';
+import StartupCard, { StartupTypeCard } from '@/components/StartupCard/StartupCard';
 
 const md = markdownit();
 
@@ -18,7 +19,10 @@ export const experimental_ppr = true;
 const StartupPage = async ({ params }: { params: Promise<{ id?: string }> }) => {
   const id = (await params).id;
 
-  const post = await client.fetch(STARTUP_BY_ID_QUERIES, { id });
+  const [post, { select: editorPosts }] = await Promise.all([
+    client.fetch(STARTUP_BY_ID_QUERIES, { id }),
+    client.fetch(PLAYLIST_BY_SLUG_QUERY, { slug: 'editor-picks' }),
+  ]);
 
   if (!post) return notFound();
 
@@ -59,11 +63,21 @@ const StartupPage = async ({ params }: { params: Promise<{ id?: string }> }) => 
           )}
         </div>
         <hr className="border-dotted bg-zinc-400 max-w-4xl my-10 mx-auto" />
-      </section>
 
-      <Suspense fallback={<Skeleton className=" bg-zinc-400 h-10 w-24 rounded-lg fixed bottom-3 right-3" />}>
-        <View id={id || ''} />
-      </Suspense>
+        {editorPosts.length > 0 && (
+          <div className="max-w-4xl">
+            <p className="text-30-semibold">Editor Picks</p>
+            <ul className="mt-7 grid sm:grid-cols-2 gap-5 ">
+              {editorPosts.map((post: StartupTypeCard) => (
+                <StartupCard key={post._id} post={post} />
+              ))}
+            </ul>
+          </div>
+        )}
+        <Suspense fallback={<Skeleton className=" bg-zinc-400 h-10 w-24 rounded-lg fixed bottom-3 right-3" />}>
+          <View id={id || ''} />
+        </Suspense>
+      </section>
     </>
   );
 };
